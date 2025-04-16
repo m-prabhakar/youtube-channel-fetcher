@@ -25,28 +25,56 @@
     <h1>YouTube Channel Results</h1>
 
     @if (count($results))
-        <table>
-                
-
-            <thead>
+    <h2>Fetched Videos</h2>
+    <table>
+        <thead>
+            <tr>
+                @foreach (array_keys($results[0]) as $heading)
+                    <th>{{ $heading }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($results as $result)
                 <tr>
-                    @foreach (array_keys($results[0] ?? []) as $column)
-                        <th>{{ $column }}</th>
+                    @foreach ($result as $value)
+                        <td>{{ is_numeric($value) ? number_format($value) : $value }}</td>
                     @endforeach
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($results as $result)
-                    <tr>
-                        @foreach ($result as $value)
-                            <td>{{ is_numeric($value) ? number_format($value) : $value }}</td>
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+            @endforeach
+        </tbody>
+    </table>
     @else
-        <p>No results found.</p>
+        <p>No videos could be fetched successfully.</p>
     @endif
+
+    {{-- Display error categories below --}}
+    @if (!empty($missingUrls))
+        <h3 style="margin-top: 30px; color: red;">Could not fetch data for {{ count($missingUrls) }} video(s):</h3>
+        <ul>
+            @foreach ($missingUrls as $url)
+                <li>{{ $url }}</li>
+            @endforeach
+        </ul>
+    @endif
+
+    @if (!empty($invalidUrls))
+        <h3 style="margin-top: 20px; color: orange;">Invalid URLs ({{ count($invalidUrls) }}):</h3>
+        <ul>
+            @foreach ($invalidUrls as $url)
+                <li>{{ $url }}</li>
+            @endforeach
+        </ul>
+    @endif
+
+    @if (!empty($duplicateUrls))
+        <h3 style="margin-top: 20px; color: blue;">Duplicate URLs ({{ count($duplicateUrls) }}):</h3>
+        <ul>
+            @foreach ($duplicateUrls as $url)
+                <li>{{ $url }}</li>
+            @endforeach
+        </ul>
+    @endif
+
 </body>
 </html>
