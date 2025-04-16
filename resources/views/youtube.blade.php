@@ -28,7 +28,7 @@
 
         <h1 class="text-2xl font-bold mb-4 text-gray-800">YouTube Channel Fetcher</h1>
 
-        <form method="POST" action="{{ route('fetch.channels') }}" id="channel-form">
+        <form method="POST" action="{{ route('fetch.channels') }}" id="channel-form" autocomplete="off">
             @csrf
 
             <!-- URL Input -->
